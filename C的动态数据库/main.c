@@ -1,10 +1,11 @@
-#include <iostream>
+#include <stdio.h>
 #include "dynarray.h"
 
 #define MYDEBUG
 
-#define LOOP(a) std::cout << "Capacity = " << DiCapacity(a) << "Count = " << DiGetCount(a) << std::endl;\
-for(int i = 0; i < DiGetCount(a); i++) std::cout << DiGetNumber(a, i) << ' '; std::cout << "*****************************************\n";
+#define LOOP(a) printf("Capacity = %d,Count = %d\n", DiCapacity(a), DiGetCount(a));\
+for(int i = 0; i < DiGetCount(a); i++)printf("%d ",DiGetNumber(a, i));\
+printf("\n*******************************************************\n");
 
 int main(void)
 {
@@ -30,7 +31,7 @@ int main(void)
 	LOOP(array)
 	#endif
 	
-	std::cout << "6的下标是：" << DiSearch(array, 6) << std::endl;
+	printf("6的下标是：%d", DiSearch(array, 6));
 	
 	#ifdef MYDEBUG
 	LOOP(array)

@@ -1,5 +1,6 @@
-#include <iostream>
-#include <cstdlib>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
 #include "dynarray.h"
 
 struct DYNINTS
@@ -16,13 +17,13 @@ PDYNINTS DiCreate(void)
 	PDYNINTS p = (PDYNINTS)malloc(sizeof(struct DYNINTS));
 	if(p == NULL)
 	{
-		std::cout << "动态数组创建失败!\n";
+		printf("动态数组创建失败!\n");
 		exit(1);
 	}
 	p->items = (int *)malloc(sizeof(int) * 5);
 	if(p->items == NULL)
 	{
-		std::cout << "动态数组创建失败!\n";
+		printf("动态数组创建失败!\n");
 		exit(1);
 	}
 	p->capacity = 5;
@@ -44,7 +45,7 @@ void DiDestroy(PDYNINTS dyArray)
 	}
 	else
 	{
-		std::cout << "动态数组删除失败!\n";
+		printf("动态数组删除失败!\n");
 		exit(1);
 	}
 }
@@ -58,7 +59,7 @@ void DiClear(const PDYNINTS dyArray)
 	}
 	else
 	{
-		std::cout << "动态数组清空失败!\n";
+		printf("动态数组清空失败!\n");
 		exit(1);
 	}
 }
@@ -98,7 +99,7 @@ void DiAppend(const PDYNINTS dyArray, const int number)
 			}
 			else
 			{
-				std::cout << "插入后动态数组已满，重新分配内存失败!\n";
+				printf("插入后动态数组已满，重新分配内存失败!\n");
 				exit(1);
 			}
 		}
@@ -127,7 +128,7 @@ void DiDelete(const PDYNINTS dyArray, const int number)
 	}
 }
 
-//查找指定元素
+//查找指定元素,没有返回-1
 int DiSearch(const PDYNINTS dyArray, const int number)
 {
 	int index = -1;
