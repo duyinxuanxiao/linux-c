@@ -8,7 +8,7 @@ struct DYNINTS
 	unsigned int capacity;    //容量
 	unsigned int count;       //元素数量
 	int *items;               //数组项目
-	bool modified;            //是否调整
+//	bool modified;            //是否调整
 };
 
 //创建动态数组
