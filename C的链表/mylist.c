@@ -1,12 +1,13 @@
-#include <stdlib>
-#include <stdbool>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <stdio.h>
 #include "mylist.h"
 
 typedef struct NODE * PNODE;
-tyepdef struct NODE{
+struct NODE{
 	PNODE next;
 	ADT object;
-}NODE;
+};
 
 struct LIST{
 	unsigned int count;
@@ -79,7 +80,7 @@ void LIAppend(PLIST list, ADT object)
 	return;
 }
 
-//向指定位置插入,0代表头节点
+//向指定位置插入,0代表头节点前
 void LIInsert(PLIST list, ADT object, unsigned int post)
 {
 	if(list == NULL)
@@ -87,35 +88,114 @@ void LIInsert(PLIST list, ADT object, unsigned int post)
 		printf("链表指针为空，无法向指定点添加元素！\n");
 		exit(1);
 	}
+	if(post > list->count)
+	{
+		printf("post超过链表长度，插入失败，请用LIAppend()向表尾插入！\n");
+		exit(1);
+	}
+	//插入位置等于链表长度直接插入表尾
+	if(post == list->count)
+	{
+		LIAppend(list, object);
+		return;
+	}
+	
+	
 	PNODE node = (PNODE)malloc(sizeof(struct NODE));
 	if(node == NULL)
 	{
 		printf("向指定点插入失败！\n");
 		exit(1);
 	}
-
+	
 	int i = 0;
-	PNODE p = list=>tail;
+	PNODE p = list->head;
 	while(i < post)
 	{
 		p = p->next;
+		i++;
 	}
 	node->next = p->next;
 	p->next = node;
+	list->count++;
 	return;
 }	
 
-//删除指定位置元素
+//删除指定位置元素1代表表头第一个元素
 void LIDelete(PLIST list, unsigned int post, DESTROY_OBJECT destroy)
 {
+	if(list == NULL)
+	{
+		printf("链表指针为空，无法删除指定点添加元素！\n");
+		exit(1);
+	}
+	if(post > list->count || post == 0)
+	{
+		printf("post超过链表长度，删除失败,无意义！\n");
+		exit(1);
+	}
 	
+	int i = 0;
+	PNODE p = list->head;
+	while(i < post-1)
+	{
+		p = p->next;
+		i++;
+	}
+	if(p->next == list->tail)
+	{
+		list->tail = p;
+	}
+	PNODE t = p->next;
+	p->next = p->next->next;
+	list->count--;
+	
+	(*destroy)(t->object);
+	free(t);
+	return;
 }
 
 //清空链表
-void LIClear(PLIST list, DESTROY_OBJECT destroy);
+void LIClear(PLIST list, DESTROY_OBJECT destroy)
+{
+	if(list == NULL)
+	{
+		printf("链表指针为空，无法清空链表！\n");
+		exit(1);
+	}
+	PNODE p = list->head->next;
+	while(p)
+	{
+		PNODE t = p;
+		p = p->next;
+		(*destroy)(t->object);
+		free(t);
+	}
+	list->head->next = NULL;
+	list->tail = list->head;
+	list->count = 0;
+	return;
+}
 
-//查找指定元素，有返回节点下标，没有返回NULL
-PLIST LISearch(PLIST list, ADT object, COMPARE_OBJECT compare);
+//查找指定元素，有返回节点下标，没有返回NULL,compare()返回值应为-1,0,1，分别代表<,=,>
+PNODE LISearch(PLIST list, ADT object, COMPARE_OBJECT compare)
+{
+	if(list == NULL)
+	{
+		printf("链表指针为空，无法清空链表！\n");
+		exit(1);
+	}
+	PNODE p = list->head->next;
+	while(p)
+	{
+		if((*compare)(p->object, object) == 0)
+		{
+			return p;
+		}
+		p = p->next;
+	}
+	return NULL;
+}
 
 //链表节点数
 unsigned int LIGetCount(PLIST list)
@@ -147,7 +227,21 @@ bool LIIsEmpty(PLIST list)
 }
 
 //遍历链表
-void LITraverse(PLIST list, MANIPULATE_OBJECT manipulate, ADT tag);
+void LITraverse(PLIST list, MANIPULATE_OBJECT manipulate, ADT tag)
+{
+	if(list == NULL)
+	{
+		printf("链表指针为空，无法b遍历链表！\n");
+		exit(1);
+	}
+	PNODE p = list->head->next;
+	while(p)
+	{
+		(*manipulate)(p->object, tag);
+		p = p->next;
+	}
+	return;
+}
 
 
 
