@@ -1,5 +1,6 @@
 #ifndef _MYLIST_H_
 #define _MYLIST_H_
+#include <stdbool.h>
 
 //链表结构体指针类型
 typedef struct LIST * PLIST;
