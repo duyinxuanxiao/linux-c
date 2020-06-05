@@ -24,10 +24,10 @@ void LIDstroy(PLIST list, DESTROY_OBJECT destroy);
 //向链表尾添加元素
 void LIAppend(PLIST list, ADT object);
 
-//向指定位置插入,0代表头节点前
+////向指定位置插入,0代表头节点前,l代表头结点后
 void LIInsert(PLIST list, ADT object, unsigned int post);
 
-//删除指定位置元素1代表表头第一个元素
+//删除指定位置元素,1代表表头第一个元素，list节点数为表尾节点
 void LIDelete(PLIST list, unsigned int post, DESTROY_OBJECT destroy);
 
 //清空链表
