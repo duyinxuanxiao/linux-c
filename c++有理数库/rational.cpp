@@ -274,4 +274,29 @@ operator >= (const CRational &a, const CRational &b)
 
 
 
+//逻辑操作符
+bool 
+operator && (const CRational &a, const CRational &b)
+{
+    return (a.m_num && b.m_num);
+}
+
+
+bool 
+operator || (const CRational &a, const CRational &b)
+{
+    return (a.m_num || b.m_num);
+}
+
+
+bool 
+CRational::operator ! ()
+{
+    return (!(this->m_num));
+}
+
+
+
+
+
 

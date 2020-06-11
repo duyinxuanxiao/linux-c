@@ -57,6 +57,12 @@ class CRational
 		friend bool operator <= (const CRational &a, const CRational &b);
 		friend bool operator >= (const CRational &a, const CRational &b);
 		
+		
+		//逻辑操作符
+		friend bool operator && (const CRational &a, const CRational &b);
+		friend bool operator || (const CRational &a, const CRational &b);
+		       bool operator !  ();
+		
 	
 	
 	
