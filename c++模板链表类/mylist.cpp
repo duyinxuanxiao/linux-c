@@ -1,19 +1,16 @@
 #include <iostream>
 #include "mylist.h"
 
-// template <typename T>
-// CList<T>::CList()
-
 template <typename T>
 CList<T>::CList(CList<T> &that)
     :m_count(that.m_count)
 {
-    m_head = new Node<T>;
-    Node<T> *p = that.m_head->next;
-    Node<T> *q = m_head;
+    m_head = new CNode<T>;
+    CNode<T> *p = that.m_head->next;
+    CNode<T> *q = m_head;
     while(p != nullptr)
     {
-        q->next = new Node<T>(*p);
+        q->next = new CNode<T>(*p);
         q = q->next;
         p = p->next; 
     }
@@ -23,20 +20,22 @@ CList<T>::CList(CList<T> &that)
 template <typename T>
 CList<T>::~CList()
 {
-    Node<T> *p = m_head;
+    CNode<T> *p = m_head;
     while(p != nullptr)
     {
-        delete p;
+        CNode<T> *q = p;
+        p = p->next;
+        delete q;
     }
 }
 
 template <typename T>
 void CList<T>::Clear()
 {
-    Node<T> *p = m_head->next;
+    CNode<T> *p = m_head->next;
     while(p != nullptr)
     {
-        Node<T> *q = p;
+        CNode<T> *q = p;
         p = p->next;
         delete q;
     }
@@ -48,12 +47,12 @@ void CList<T>::Clear()
 template <typename T>
 void CList<T>::Delete(const T &data)
 {
-    Node<T> *p = m_head;
+    CNode<T> *p = m_head;
     while(p->next != nullptr)
     {
         if(p->next->data == data)
         {
-            Node<T> *q = p->next;
+            CNode<T> *q = p->next;
             if(p->next == m_tail)
             {
                 m_tail = p;
@@ -71,12 +70,12 @@ template <typename T>
 void CList<T>::DeletePosition(const unsigned int position)
 {
     int t = 0;
-    Node<T> *p = m_head;
+    CNode<T> *p = m_head;
     while(p->next != nullptr)
     {
         if(t == position)
         {
-            Node<T> *q = p->next;
+            CNode<T> *q = p->next;
             if(p->next == m_tail)
             {
                 m_tail = p;
@@ -100,12 +99,12 @@ void CList<T>::Insert(const T &data, const unsigned int  position)
     }
     else
     {
-        Node<T> *p = m_head;
+        CNode<T> *p = m_head;
         for(int t = 0; t < m_count; t++)
         {
             if(t == position)
             {
-                Node<T> *q = new Node<T>(data);
+                CNode<T> *q = new CNode<T>(data);
                 q->next = p->next;
                 p->next = q;
                 m_count++;
@@ -120,7 +119,7 @@ void CList<T>::Insert(const T &data, const unsigned int  position)
 template <typename T>
 void CList<T>::EmplaceBack(const T &data)
 {
-    m_tail->next = new Node<T>(data);
+    m_tail->next = new CNode<T>(data);
     m_tail = m_tail->next;
     m_count++;
 }
@@ -128,8 +127,20 @@ void CList<T>::EmplaceBack(const T &data)
 template <typename T>
 void CList<T>::EmplaceFront(const T &data)
 {
-    Node<T> *p = new Node<T>(data);
+    CNode<T> *p = new CNode<T>(data);
     p->next = m_head->next;
     m_head->next = p;
     m_count++;
+}
+
+
+template <typename T>
+void CList<T>::PrintList()
+{
+    CNode<T> *p = m_head->next;
+
+    while(p != nullptr)
+    {
+        std::cout << p->data << ' ';
+    }
 }

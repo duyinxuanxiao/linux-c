@@ -1,5 +1,6 @@
 #ifndef _MYLIST_H_
 #define _MYLIST_H_
+template <typename T> class CList;
 
 template <typename T>
 class CNode
@@ -9,7 +10,7 @@ class CNode
     CNode(T dt) : data(dt), next(nullptr) {}
     ~CNode() = default;
 
-    friend class CList<t>;
+    friend class CList<T>;
 
     private:
     T data;
@@ -21,7 +22,7 @@ template <typename T>
 class CList
 {
     public:
-    CList() : m_count(0), m_head(new CNode), m_tail(m_head) {}
+    CList() : m_count(0){m_head = new CNode<T>; m_tail = m_head;}
     CList(CList<T> &that);
     ~CList();
 
@@ -31,6 +32,7 @@ class CList
     void Insert(const T &data, const unsigned int  position);
     void EmplaceBack(const T &data);
     void EmplaceFront(const T &data);
+    void PrintList();
 
 
 
