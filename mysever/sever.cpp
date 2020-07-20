@@ -1,4 +1,6 @@
 #include<cstdio>
+#include<cstdlib>
+#include<cstring>
 
 #include <unistd.h>
 #include <netdb.h>
@@ -25,7 +27,7 @@ int main(int argc, char *argv[])
 	severAddr.sin_port = htons(5051);                //指定通信端口
 	
 	//服务端用于通信的地址端口绑定在socket上
-	if (bind(listenFd, (struct sockaddr*)severAddr, sizeof(severAddr)) != 0) 
+	if (bind(listenFd, (struct sockaddr*)&severAddr, sizeof(severAddr)) != 0) 
 	{
 		close(listenFd);
 		perror("bind");
@@ -42,9 +44,9 @@ int main(int argc, char *argv[])
 	
 	//客户端地址信息结构体 
 	struct sockaddr_in clientAddr;
-	//int sockLen = sizeof(struct sockaddr_in);
-	//得到客户端socket 
-	int clientFd = accept(listenFd, (struct sockaddr*)&clientAddr, sizeof(struct sockaddr_in));
+	int sockLen = sizeof(struct sockaddr_in);
+	//创建一个新的套接字，以接受客户连接，返回值为新的套接字文件描述符 
+	int clientFd = accept(listenFd, (struct sockaddr*)&clientAddr, (socklen_t*)&sockLen);
 	printf("客户端：%s已连接\n", inet_ntoa(clientAddr.sin_addr) );
 	
 	int bufferSize = 1024;
@@ -58,15 +60,15 @@ int main(int argc, char *argv[])
 			printf("iret = %d\n", iret);
 			break;
 		}
-		printf("iret= %d:%s", iret, buffer);
+		printf("iret= %d:%s\n", iret, buffer);
 		//发送 
 		char sendBuffer[] = "OK";
-		if (iret = send(clientFd, buffer, bufferSize, 0) <= 0)
+		if (iret = send(clientFd, sendBuffer, sizeof(sendBuffer), 0) <= 0)
 		{
 			printf("iret = %d", iret);
 			break;
 		}
-		printf("iret = %d:%s", iret, sendBuffer);
+		printf("iret = %d:%s\n", iret, sendBuffer);
 	}
 	
 	close(listenFd);
