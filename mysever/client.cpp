@@ -26,7 +26,6 @@ int main(int argc, char *argv[])
 		close(sockFd);
 		exit(-1);
 	}
-	
 	//服务端地址信息数据结构
 	struct sockaddr_in severAddr;
 	memset(&severAddr, 0, sizeof(severAddr));
@@ -34,6 +33,7 @@ int main(int argc, char *argv[])
 	severAddr.sin_port = htons(5051);
 	memcpy(&severAddr.sin_addr, h->h_addr, h->h_length);
 	
+	//向服务端发起连接清求
 	if(connect(sockFd, (struct sockaddr*)&severAddr, sizeof(severAddr)) != 0)
 	{
 		perror("connect");
@@ -43,17 +43,21 @@ int main(int argc, char *argv[])
 	
 	int bufferSize = 1024;
 	char buffer[bufferSize];
-	for(int i = 0; i < 5; i++)
+	while(1)
 	{
-		memset(buffer, 0, bufferSize);
-		sprintf(buffer, "这是第%d条消息!\n", i+1);
+		scanf("%s", buffer);
+		
 		int iret;
 		if(iret = send(sockFd, buffer, bufferSize, 0) <= 0)
 		{
 			perror("send");
 			break;
 		}
-		printf("iret = %d, 发送:%s\n", iret, buffer);
+		printf("客户端:iret = %d, 发送:%s\n", iret, buffer);
+		if(strcmp(buffer, "bye") == 0)
+		{
+			break;
+		}
 		
 		memset(buffer, 0, bufferSize);
 		if(iret = recv(sockFd, buffer, bufferSize, 0) <=0)
@@ -61,7 +65,7 @@ int main(int argc, char *argv[])
 			perror("recv");
 			break;
 		}
-		printf("iret = %d, 收到:%s\n", iret, buffer);
+		printf("服务端:iret = %d, 收到:%s\n", iret, buffer);
 	}
 	
 	close(sockFd);

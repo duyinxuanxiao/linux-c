@@ -23,7 +23,8 @@ int main(int argc, char *argv[])
 	struct sockaddr_in severAddr;                    //服务端地址信息数据结构 
 	memset(&severAddr, 0, sizeof(severAddr));        //初始化 
 	severAddr.sin_family = AF_INET;                  //协议族 
-	severAddr.sin_addr.s_addr = htonl(INADDR_ANY);   //任意本地IP地址
+	//severAddr.sin_addr.s_addr = htonl(INADDR_ANY);   //任意本地IP地址
+	severAddr.sin_addr.s_addr = inet_addr("192.168.31.105"); // 指定ip地址。
 	severAddr.sin_port = htons(5051);                //指定通信端口
 	
 	//服务端用于通信的地址端口绑定在socket上
@@ -50,25 +51,32 @@ int main(int argc, char *argv[])
 	printf("客户端：%s已连接\n", inet_ntoa(clientAddr.sin_addr) );
 	
 	int bufferSize = 1024;
-	char buffer[bufferSize];
+	char recvBuffer[bufferSize];
+	char sendBuffer[bufferSize];
 	while( 1 )
 	{
 		int iret;
 		//接收 
-		if (iret = recv(clientFd, buffer, bufferSize, 0) <= 0)
+		if (iret = recv(clientFd, recvBuffer, bufferSize, 0) <= 0)
 		{
 			printf("iret = %d\n", iret);
 			break;
 		}
-		printf("iret= %d:%s\n", iret, buffer);
+		printf("客户端:iret= %d, %s\n", iret, recvBuffer);
+		if(strcmp(recvBuffer, "bye") == 0)
+		{
+			break;
+		}
 		//发送 
-		char sendBuffer[] = "OK";
-		if (iret = send(clientFd, sendBuffer, sizeof(sendBuffer), 0) <= 0)
+		scanf("%s", sendBuffer);
+		//char sendBuffer[] = "OK";
+		if (iret = send(clientFd, sendBuffer, bufferSize, 0) <= 0)
 		{
 			printf("iret = %d", iret);
 			break;
 		}
-		printf("iret = %d:%s\n", iret, sendBuffer);
+		printf("服务端:%s\n", sendBuffer);
+		//printf("iret = %d:%s\n", iret, sendBuffer);
 	}
 	
 	close(listenFd);
