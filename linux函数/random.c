@@ -4,9 +4,7 @@
 #include <fcntl.h>
 
 int main(int argc, char *argv[])
-{
-	
-	
+{	
 	int cont = 0;
 	printf("请问需要多少随机数:");
 	scanf("%d", &cont);
